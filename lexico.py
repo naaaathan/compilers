@@ -22,8 +22,17 @@ class AnalizadorLexico():
     def isDigitOrLetter(self,symbol):
         return symbol.isalnum() or symbol == '_'
 
+    def peekNextChar(self):
+        current_position = self.programFile.tell()
+        next_char = self.programFile.read(1)
+        self.programFile.seek(current_position)
+        return next_char
 
     def nextToken(self,state, symbol):
+
+        lookahead_symbol = self.peekNextChar()
+        print("lookahead_symbol="+lookahead_symbol)
+
         if state == -1: 
             # [ _ | b | d | g | h | j-q | t-z ] -> S0
             if symbol == '_' : 
