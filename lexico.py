@@ -37,51 +37,54 @@ class AnalizadorLexico:
         if state == -1:
             # [ _ | b | d | g | h | j-q | t-z ] -> S0
             if symbol == '_':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             elif symbol == 'b':
-                return 1, Token("identificador", "identificador")
-            elif symbol == 'd':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             elif symbol == 'g':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             elif symbol == 'h':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             elif symbol == 'j':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             elif symbol == 'k':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             elif symbol == 'l':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             elif symbol == 'm':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             elif symbol == 'n':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             elif symbol == 'o':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             elif symbol == 'p':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             elif symbol == 'q':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
+            elif symbol == 'r':
+                return 1, Token("id", "id")
             elif symbol == 't':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             elif symbol == 'u':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
+            elif symbol == 's':
+                return 1, Token("id", "id")
             elif symbol == 'v':
-                return 1, Token("identificador", "identificador")
-            elif symbol == 'w':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             elif symbol == 'x':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             elif symbol == 'y':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             elif symbol == 'z':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
 
             elif symbol == 'a':
                 return 49, None
 
             elif symbol == 'c':
                 return 101, None
+
+            elif symbol == 'd':
+                return 120, None
 
             elif symbol == 'i':
                 return 91, None
@@ -92,11 +95,8 @@ class AnalizadorLexico:
             elif symbol == 'f':
                 return 4, None
 
-            elif symbol == 'r':
+            elif symbol == 'w':
                 return 41, None
-
-            elif symbol == 's':
-                return 14, None
 
             elif symbol == '<':
                 return 69, Token("RELOP", "LT")
@@ -157,13 +157,13 @@ class AnalizadorLexico:
 
         elif state == 0:
             if symbol.isalnum() or symbol == '_':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 1:
             if symbol.isalnum() or symbol == '_':
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
@@ -173,233 +173,137 @@ class AnalizadorLexico:
             elif symbol == 'l':
                 return 96, None
             elif symbol != 'u' and symbol != 'l' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 5:
             if symbol == 'n':
-                return 6, Token("fun", "fun")
+                return 125, Token("fun", "fun")
             elif symbol != 'n' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
+            else:
+                return self.ERROR, None
+
+        elif state == 125:
+            if self.isDigitOrLetter(symbol):
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 6:
             if symbol != 'c' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 7:
             if symbol != 't' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 8:
             if symbol != 'i' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 9:
             if symbol != 'o' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 10:
             if symbol != 'n' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 11:
             if self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
-            else:
-                return self.ERROR, None
-
-        elif state == 14:
-            if symbol == 'e':
-                return 15, Token("se", "se")
-            elif symbol != 'e' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
-            else:
-                return self.ERROR, None
-
-        elif state == 15:
-            if symbol == 'n':
-                return 116, None
-            elif symbol != 'n' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 18:
-            if symbol == 'n':
+            if symbol == 'l':
                 return 19, None
-            elif symbol != 'n' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+            elif symbol != 'l' and self.isDigitOrLetter(symbol):
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 19:
-            if symbol == 't':
+            if symbol == 's':
                 return 20, None
-            elif symbol == 'q':
-                return 33, None
-            elif symbol != 't' and symbol != 'q' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+            elif symbol != 's' and self.isDigitOrLetter(symbol):
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 20:
-            if symbol == 'a':
-                return 21, None
-            elif symbol != 'a' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+            if symbol == 'e':
+                return 22, Token("else", "else")
+            elif symbol != 'e' and self.isDigitOrLetter(symbol):
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
-
-        elif state == 21:
-            if symbol == 'o':
-                return 22, Token("entao", "entao")
-            elif symbol != 'o' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
-            else:
-                return self.ERROR, Token("identificador", "identificador")
 
         elif state == 22:
             if self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
-            else:
-                return self.ERROR, None
-
-        elif state == 26:
-            if symbol == 'c':
-                return 27, None
-            elif symbol != 'c' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
-            else:
-                return self.ERROR, None
-
-        elif state == 27:
-            if symbol == 'a':
-                return 28, Token("faca", "faca")
-            elif symbol != 'a' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
-            else:
-                return self.ERROR, None
-
-        elif state == 28:
-            if self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
-            else:
-                return self.ERROR, None
-
-        elif state == 33:
-            if symbol == 'u':
-                return 34, None
-            elif symbol != 'u' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
-            else:
-                return self.ERROR, None
-
-        elif state == 34:
-            if symbol == 'a':
-                return 35, None
-            elif symbol != 'a' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
-            else:
-                return self.ERROR, None
-
-        elif state == 35:
-            if symbol == 'n':
-                return 36, None
-            elif symbol != 'n' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
-            else:
-                return self.ERROR, None
-
-        elif state == 36:
-            if symbol == 't':
-                return 37, None
-            elif symbol != 't' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
-            else:
-                return self.ERROR, None
-
-        elif state == 37:
-            if symbol == 'o':
-                return 38, Token("enquanto", "enquanto")
-            elif symbol != 'o' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
-            else:
-                return self.ERROR, None
-
-        elif state == 38:
-            if self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 41:
-            if symbol == 'e':
+            if symbol == 'h':
                 return 42, None
-            elif symbol != 'e' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+            elif symbol != 'h' and self.isDigitOrLetter(symbol):
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 42:
-            if symbol == 'p':
+            if symbol == 'i':
                 return 43, None
-            elif symbol != 'p' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+            elif symbol != 'i' and self.isDigitOrLetter(symbol):
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 43:
-            if symbol == 'i':
-                return 44, None
-            elif symbol != 'i' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+            if symbol == 'l':
+                return 43, None
+            elif symbol != 'l' and self.isDigitOrLetter(symbol):
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 44:
-            if symbol == 't':
-                return 45, None
-            elif symbol != 't' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+            if symbol == 'e':
+                return 45, Token("while", "while")
+            elif symbol != 'e' and self.isDigitOrLetter(symbol):
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 45:
-            if symbol == 'a':
-                return 46, Token("repita", "repita")
-            elif symbol != 'a' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
-            else:
-                return self.ERROR, None
-
-        elif state == 46:
             if self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 49:
             if self.isDigitOrLetter(symbol) or not self.isDigitOrLetter(lookahead_symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 51:
             if self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
@@ -475,7 +379,7 @@ class AnalizadorLexico:
 
         elif state == 91:
             if symbol != 'n' and symbol != 'f' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             elif symbol == 'n':
                 return 92, None
             elif symbol == 'f':
@@ -487,13 +391,13 @@ class AnalizadorLexico:
             if symbol == 't':
                 return 93, Token("int", "int")
             elif symbol != 't' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 93:
             if self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
@@ -501,7 +405,7 @@ class AnalizadorLexico:
             if symbol == 'o':
                 return 97, None
             elif symbol != 'o' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
@@ -509,7 +413,7 @@ class AnalizadorLexico:
             if symbol == 'a':
                 return 98, None
             elif symbol != 'a' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
@@ -517,13 +421,13 @@ class AnalizadorLexico:
             if symbol == 't':
                 return 99, Token("float", "float")
             elif symbol != 't' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 99:
             if self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
@@ -531,7 +435,7 @@ class AnalizadorLexico:
             if symbol == 'h':
                 return 102, None
             elif symbol != 'h' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
@@ -539,7 +443,7 @@ class AnalizadorLexico:
             if symbol == 'a':
                 return 103, None
             elif symbol != 'a' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
@@ -547,13 +451,13 @@ class AnalizadorLexico:
             if symbol == 'r':
                 return 104, Token("char", "char")
             elif symbol != 'r' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         elif state == 104:
             if self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
@@ -575,25 +479,23 @@ class AnalizadorLexico:
             else:
                 return self.ERROR, None
 
-        elif state == 116:
-            if symbol == 'a':
-                return 117, None
-            elif symbol != 'a' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
-            else:
-                return self.ERROR, None
-
-        elif state == 117:
-            if symbol == 'o':
-                return 118, Token("senao", "senao")
-            elif symbol != 'o' and self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
-            else:
-                return self.ERROR, None
-
         elif state == 118:
             if self.isDigitOrLetter(symbol):
-                return 1, Token("identificador", "identificador")
+                return 1, Token("id", "id")
+            else:
+                return self.ERROR, None
+
+        elif state == 120:
+            if symbol == 'o':
+                return 121, Token("do", "do")
+            elif symbol != 'o' and self.isDigitOrLetter(symbol):
+                return 1, Token("id", "id")
+            else:
+                return self.ERROR, None
+
+        elif state == 121:
+            if self.isDigitOrLetter(symbol):
+                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
@@ -644,7 +546,6 @@ class AnalizadorLexico:
             currentState = self.nextToken(currentState[0], symbol)
             print(symbol)
             print(currentState[0])
-            # print(currentState[1])
 
             if currentState[0] == self.ERROR:
                 print(f"Erro léxico na linha {self.linha}, coluna {self.coluna}: caracter '{symbol}' não reconhecido.")
@@ -656,7 +557,7 @@ class AnalizadorLexico:
                     self.linha += 1
 
                 if currentState[1].atributo != 'comentario' and currentState[1].atributo != 'espaco':
-                    if currentState[1].atributo == 'identificador':
+                    if currentState[1].atributo == 'id':
                         token_value = token_value.strip()
                     tks.append((Token(currentState[1].atributo, token_value), self.linha, self.coluna))
                     token_value = ""
@@ -665,19 +566,6 @@ class AnalizadorLexico:
                     token_value += symbol
 
         return tks
-
-    def analisar_codigo(self, codigo):
-        self.programFile.close()
-        with open(self.programFileName, "w") as f:
-            f.write(codigo)
-
-        self.programFile = open(self.programFileName, "r+")
-        self.linha = 1
-        self.coluna = 1
-        self.currentPositionFile = 0
-        self.endFile = os.path.getsize("./" + self.programFileName)
-
-        return self.run()
 
 
 analizador = AnalizadorLexico("codigo_exemplo")

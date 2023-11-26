@@ -1,4 +1,11 @@
 
 if(a = b){
-    int x = 10;
+    do{
+        int x = 10;
+    }
+}else{
+    do{
+        int x = 20;
+    }
+
 }
