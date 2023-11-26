@@ -1,5 +1,4 @@
 
-int main() {
-    int x = 10 + 10;
-    return x;
+if(a = b){
+    int x = 10;
 }
