@@ -544,8 +544,8 @@ class AnalizadorLexico:
                 continue
 
             currentState = self.nextToken(currentState[0], symbol)
-            print(symbol)
-            print(currentState[0])
+            # print(symbol)
+            # print(currentState[0])
 
             if currentState[0] == self.ERROR:
                 print(f"Erro léxico na linha {self.linha}, coluna {self.coluna}: caracter '{symbol}' não reconhecido.")
