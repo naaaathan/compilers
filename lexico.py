@@ -2,15 +2,14 @@ import os
 
 
 class Token:
+    # classe token com tipo e atributo
     def __init__(self, tipo, atributo):
         self.tipo = tipo
         self.atributo = atributo
 
-    def __str__(self):
-        return f"Token({self.tipo}, {self.atributo})"
 
-
-class AnalizadorLexico:
+class AnalizadorLexico():
+    # classe analisador lexico - diagrama unificado de transicoes
     def __init__(self, programFileName):
         self.ERROR = None
         self.programFileName = programFileName
@@ -18,558 +17,747 @@ class AnalizadorLexico:
         self.linha = 1
         self.coluna = 1
         self.currentPositionFile = 0
-        self.endFile = os.path.getsize("./" + self.programFileName)
+        self.endFile = os.path.getsize("./" + self.programFileName)  # tamanho do arquivo em bytes
 
-    @staticmethod
-    def isDigitOrLetter(symbol):
+    # verifica se faz parte de um identificador
+    def isDigitOrLetter(self, symbol):
         return symbol.isalnum() or symbol == '_'
 
-    def peekNextChar(self):
-        current_position = self.programFile.tell()
-        next_char = self.programFile.read(1)
-        self.programFile.seek(current_position)
-        return next_char
-
+    # Busca o proximo estado
     def nextToken(self, state, symbol):
-
-        lookahead_symbol = self.peekNextChar()
-
         if state == -1:
             # [ _ | b | d | g | h | j-q | t-z ] -> S0
             if symbol == '_':
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             elif symbol == 'b':
-                return 1, Token("id", "id")
-            elif symbol == 'g':
-                return 1, Token("id", "id")
-            elif symbol == 'h':
-                return 1, Token("id", "id")
-            elif symbol == 'j':
-                return 1, Token("id", "id")
-            elif symbol == 'k':
-                return 1, Token("id", "id")
-            elif symbol == 'l':
-                return 1, Token("id", "id")
-            elif symbol == 'm':
-                return 1, Token("id", "id")
-            elif symbol == 'n':
-                return 1, Token("id", "id")
-            elif symbol == 'o':
-                return 1, Token("id", "id")
-            elif symbol == 'p':
-                return 1, Token("id", "id")
-            elif symbol == 'q':
-                return 1, Token("id", "id")
-            elif symbol == 'r':
-                return 1, Token("id", "id")
-            elif symbol == 't':
-                return 1, Token("id", "id")
-            elif symbol == 'u':
-                return 1, Token("id", "id")
-            elif symbol == 's':
-                return 1, Token("id", "id")
-            elif symbol == 'v':
-                return 1, Token("id", "id")
-            elif symbol == 'x':
-                return 1, Token("id", "id")
-            elif symbol == 'y':
-                return 1, Token("id", "id")
-            elif symbol == 'z':
-                return 1, Token("id", "id")
-
-            elif symbol == 'a':
-                return 49, None
-
-            elif symbol == 'c':
-                return 101, None
-
+                return (1, Token("identificador", "identificador"))
             elif symbol == 'd':
-                return 120, None
-
-            elif symbol == 'i':
-                return 91, None
-
-            elif symbol == 'e':
-                return 18, None
-
-            elif symbol == 'f':
-                return 4, None
-
+                return (1, Token("identificador", "identificador"))
+            elif symbol == 'g':
+                return (1, Token("identificador", "identificador"))
+            elif symbol == 'h':
+                return (1, Token("identificador", "identificador"))
+            elif symbol == 'j':
+                return (1, Token("identificador", "identificador"))
+            elif symbol == 'k':
+                return (1, Token("identificador", "identificador"))
+            elif symbol == 'l':
+                return (1, Token("identificador", "identificador"))
+            elif symbol == 'm':
+                return (1, Token("identificador", "identificador"))
+            elif symbol == 'n':
+                return (1, Token("identificador", "identificador"))
+            elif symbol == 'o':
+                return (1, Token("identificador", "identificador"))
+            elif symbol == 'p':
+                return (1, Token("identificador", "identificador"))
+            elif symbol == 'q':
+                return (1, Token("identificador", "identificador"))
+            elif symbol == 't':
+                return (1, Token("identificador", "identificador"))
+            elif symbol == 'u':
+                return (1, Token("identificador", "identificador"))
+            elif symbol == 'v':
+                return (1, Token("identificador", "identificador"))
             elif symbol == 'w':
-                return 41, None
+                return (1, Token("identificador", "identificador"))
+            elif symbol == 'x':
+                return (1, Token("identificador", "identificador"))
+            elif symbol == 'y':
+                return (1, Token("identificador", "identificador"))
+            elif symbol == 'z':
+                return (1, Token("identificador", "identificador"))
 
+            # c -> S101
+            elif symbol == 'c':
+                return (101, None)
+
+            # i -> S91
+            elif symbol == 'i':
+                return (91, None)
+
+            # a -> S49
+            elif symbol == 'a':
+                return (49, None)
+
+            # e -> S18
+            elif symbol == 'e':
+                return (18, None)
+
+            # f -> S4
+            elif symbol == 'f':
+                return (4, None)
+
+            # s -> S14
+            elif symbol == 's':
+                return (14, None)
+
+
+            # r -> S41
+            elif symbol == 'r':
+                return (41, None)
+
+            # < -> S69
             elif symbol == '<':
-                return 69, Token("RELOP", "LT")
+                return (69, Token("RELOP", "LT"))
 
+            # > -> S73
             elif symbol == '>':
-                return 73, Token("RELOP", "GT")
+                return (73, Token("RELOP", "GT"))
 
+            # = -> S54
             elif symbol == '=':
-                return 54, Token("=", "=")
+                return (54, Token("=", "="))
 
+            # : -> S83
             elif symbol == ':':
-                return 83, Token(":", ":")
+                return (83, Token(":", ":"))
 
+            # , -> S84
             elif symbol == ',':
-                return 84, Token(",", ",")
+                return (84, Token(",", ","))
 
+            # ; -> S85
             elif symbol == ';':
-                return 85, Token(";", ";")
+                return (85, Token(";", ";"))
 
+            # ( -> S86
             elif symbol == '(':
-                return 86, Token("(", "(")
+                return (86, Token("(", "("))
 
+            # ) -> S87
             elif symbol == ')':
-                return 87, Token(")", ")")
+                return (87, Token(")", ")"))
 
+            # { -> S88
             elif symbol == '{':
-                return 88, Token("{", "{")
+                return (88, Token("{", "{"))
 
+            # } -> S89
             elif symbol == '}':
-                return 89, Token("}", "}")
+                return (89, Token("}", "}"))
 
+            # digito -> S57
             elif symbol.isnumeric():
-                return 57, Token("digito", "numero")
+                return (57, Token("digito", "numero"))
 
+            # letra -> S110
             elif symbol == "'":
-                return 110, None
+                return (110, None)
 
+            # ESTADOS 107 108 --------------------------------------------------
+            # [ , \t, \n] -> 107
             elif symbol == ' ' or symbol == '\t' or symbol == '\n':
-                return 107, Token("espaco", "espaco")
+                return (107, Token("espaco", "espaco"))
 
+            # + -> S77
             elif symbol == '+':
-                return 77, Token("op_aritimetico", "+")
+                return (77, Token("op_aritimetico", "+"))
 
+            # - -> S78
             elif symbol == '-':
-                return 78, Token("op_aritimetico", "-")
+                return (78, Token("op_aritimetico", "-"))
 
+            # * -> S79
             elif symbol == '*':
-                return 79, Token("op_aritimetico", "*")
+                return (79, Token("op_aritimetico", "*"))
 
+            # / -> S80
             elif symbol == '/':
-                return 80, Token("op_aritimetico", "/")
+                return (80, Token("op_aritimetico", "/"))
 
+            # ^ -> S81
             elif symbol == '^':
-                return 81, Token("op_aritimetico", "^")
+                return (81, Token("op_aritimetico", "^"))
 
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 0 ------------------------------------------------------
         elif state == 0:
             if symbol.isalnum() or symbol == '_':
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 1 ------------------------------------------------------
         elif state == 1:
             if symbol.isalnum() or symbol == '_':
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 4 ------------------------------------------------------
         elif state == 4:
             if symbol == 'u':
-                return 5, None
+                return (5, None)
+            elif symbol == 'a':
+                return (26, None)
             elif symbol == 'l':
-                return 96, None
-            elif symbol != 'u' and symbol != 'l' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+                return (96, None)
+            elif symbol != 'u' and symbol != 'a' and symbol != 'l' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 5 ------------------------------------------------------
         elif state == 5:
             if symbol == 'n':
-                return 125, Token("fun", "fun")
+                return (6, None)
             elif symbol != 'n' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
-        elif state == 125:
-            if self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-            else:
-                return self.ERROR, None
-
+        # State 6 ------------------------------------------------------
         elif state == 6:
-            if symbol != 'c' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+            if symbol == 'c':
+                return (7, None)
+            elif symbol != 'c' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 7 ------------------------------------------------------
         elif state == 7:
-            if symbol != 't' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+            if symbol == 't':
+                return (8, None)
+            elif symbol != 't' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 8 ------------------------------------------------------
         elif state == 8:
-            if symbol != 'i' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+            if symbol == 'i':
+                return (9, None)
+            elif symbol != 'i' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 9 ------------------------------------------------------
         elif state == 9:
-            if symbol != 'o' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+            if symbol == 'o':
+                return (10, None)
+            elif symbol != 'o' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 10 ------------------------------------------------------
         elif state == 10:
-            if symbol != 'n' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+            if symbol == 'n':
+                return (11, Token("function", "function"))
+            elif symbol != 'n' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 11 ------------------------------------------------------
         elif state == 11:
             if self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
-        elif state == 18:
-            if symbol == 'l':
-                return 19, None
-            elif symbol != 'l' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-            else:
-                return self.ERROR, None
-
-        elif state == 19:
-            if symbol == 's':
-                return 20, None
-            elif symbol != 's' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-            else:
-                return self.ERROR, None
-
-        elif state == 20:
+        # State 14 ------------------------------------------------------
+        elif state == 14:
             if symbol == 'e':
-                return 22, Token("else", "else")
+                return (15, Token("se", "se"))
             elif symbol != 'e' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 15 ------------------------------------------------------
+        elif state == 15:
+            if symbol == 'n':
+                return (116, None)
+            elif symbol != 'n' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+
+        # State 18 ------------------------------------------------------
+        elif state == 18:
+            if symbol == 'n':
+                return (19, None)
+            elif symbol != 'n' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+        # State 19 ------------------------------------------------------
+        elif state == 19:
+            if symbol == 't':
+                return (20, None)
+            elif symbol == 'q':
+                return (33, None)
+            elif symbol != 't' and symbol != 'q' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+        # State 20 ------------------------------------------------------
+        elif state == 20:
+            if symbol == 'a':
+                return (21, None)
+            elif symbol != 'a' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+        # State 21 ------------------------------------------------------
+        elif state == 21:
+            if symbol == 'o':
+                return (22, Token("entao", "entao"))
+            elif symbol != 'o' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, Token("identificador", "identificador"))
+
+        # State 22 ------------------------------------------------------
         elif state == 22:
             if self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
-        elif state == 41:
-            if symbol == 'h':
-                return 42, None
-            elif symbol != 'h' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+        # State 26 ------------------------------------------------------
+        elif state == 26:
+            if symbol == 'c':
+                return (27, None)
+            elif symbol != 'c' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
-        elif state == 42:
-            if symbol == 'i':
-                return 43, None
-            elif symbol != 'i' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+        # State 27 ------------------------------------------------------
+        elif state == 27:
+            if symbol == 'a':
+                return (28, Token("faca", "faca"))
+            elif symbol != 'a' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
-        elif state == 43:
-            if symbol == 'l':
-                return 43, None
-            elif symbol != 'l' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-            else:
-                return self.ERROR, None
-
-        elif state == 44:
-            if symbol == 'e':
-                return 45, Token("while", "while")
-            elif symbol != 'e' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-            else:
-                return self.ERROR, None
-
-        elif state == 45:
+        # State 28 ------------------------------------------------------
+        elif state == 28:
             if self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 33 ------------------------------------------------------
+        elif state == 33:
+            if symbol == 'u':
+                return (34, None)
+            elif symbol != 'u' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+        # State 34 ------------------------------------------------------
+        elif state == 34:
+            if symbol == 'a':
+                return (35, None)
+            elif symbol != 'a' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+        # State 35 ------------------------------------------------------
+        elif state == 35:
+            if symbol == 'n':
+                return (36, None)
+            elif symbol != 'n' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+        # State 36 ------------------------------------------------------
+        elif state == 36:
+            if symbol == 't':
+                return (37, None)
+            elif symbol != 't' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+        # State 37 ------------------------------------------------------
+        elif state == 37:
+            if symbol == 'o':
+                return (38, Token("enquanto", "enquanto"))
+            elif symbol != 'o' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+        # State 38 ------------------------------------------------------
+        elif state == 38:
+            if self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+        # State 41 ------------------------------------------------------
+        elif state == 41:
+            if symbol == 'e':
+                return (42, None)
+            elif symbol != 'e' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+        # State 42 ------------------------------------------------------
+        elif state == 42:
+            if symbol == 'p':
+                return (43, None)
+            elif symbol != 'p' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+        # State 43 ------------------------------------------------------
+        elif state == 43:
+            if symbol == 'i':
+                return (44, None)
+            elif symbol != 'i' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+        # State 44 ------------------------------------------------------
+        elif state == 44:
+            if symbol == 't':
+                return (45, None)
+            elif symbol != 't' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+        # State 45 ------------------------------------------------------
+        elif state == 45:
+            if symbol == 'a':
+                return (46, Token("repita", "repita"))
+            elif symbol != 'a' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+        # State 46 ------------------------------------------------------
+        elif state == 46:
+            if self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+        # State 49 ------------------------------------------------------
         elif state == 49:
-            if self.isDigitOrLetter(symbol) or not self.isDigitOrLetter(lookahead_symbol):
-                return 1, Token("id", "id")
+            if symbol == 't':
+                return (50, None)
+            elif symbol != 't' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 50 ------------------------------------------------------
+        elif state == 50:
+            if symbol == 'e':
+                return (51, Token("ate", "ate"))
+            elif symbol != 'e' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+        # State 51 ------------------------------------------------------
         elif state == 51:
             if self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 54 ------------------------------------------------------
         elif state == 54:
             if symbol == '=':
-                return 68, Token("op_relacional", "=")
+                return (68, Token("op_relacional", "="))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 57 ------------------------------------------------------
         elif state == 57:
             if symbol.isnumeric():
-                return 57, Token("digito", "numero")
+                return (57, Token("digito", "numero"))
             elif symbol == '.':
-                return 59, None
+                return (59, None)
             elif symbol == 'E':
-                return 62, None
+                return (62, None)
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 59 ------------------------------------------------------
         elif state == 59:
             if symbol.isnumeric():
-                return 60, Token("digito", "numero")
+                return (60, Token("digito", "numero"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 60 ------------------------------------------------------
         elif state == 60:
             if symbol.isnumeric():
-                return 60, Token("digito", "numero")
+                return (60, Token("digito", "numero"))
             elif symbol == 'E':
-                return 62, None
+                return (62, None)
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 62 ------------------------------------------------------
         elif state == 62:
             if symbol.isnumeric():
-                return 64, Token("digito", "numero")
+                return (64, Token("digito", "numero"))
             elif symbol == '+' or symbol == '-':
-                return 63, None
+                return (63, None)
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 63 ------------------------------------------------------
         elif state == 63:
             if symbol.isnumeric():
-                return 64, Token("digito", "numero")
+                return (64, Token("digito", "numero"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 64 ------------------------------------------------------
         elif state == 64:
             if symbol.isnumeric():
-                return 64, Token("digito", "numero")
+                return (64, Token("digito", "numero"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 69 ------------------------------------------------------
         elif state == 69:
             if symbol == '>':
-                return 70, Token("op_relacional", "<>")
+                return (70, Token("op_relacional", "<>"))
             elif symbol == '=':
-                return 71, Token("op_relacional", "<=")
+                return (71, Token("op_relacional", "<="))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 73 ------------------------------------------------------
         elif state == 73:
             if symbol == '=':
-                return 74, Token("op_relacional", ">=")
+                return (74, Token("op_relacional", ">="))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 80 ------------------------------------------------------
         elif state == 80:
             if symbol == '*':
-                return 122, None
+                return (122, None)
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 91 ------------------------------------------------------
         elif state == 91:
-            if symbol != 'n' and symbol != 'f' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+            if symbol != 'n' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
             elif symbol == 'n':
-                return 92, None
-            elif symbol == 'f':
-                return 93, Token("if", "if")
+                return (92, None)
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 92 ------------------------------------------------------
         elif state == 92:
             if symbol == 't':
-                return 93, Token("int", "int")
+                return (93, Token("int", "int"))
             elif symbol != 't' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 93 ------------------------------------------------------
         elif state == 93:
             if self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 96 ------------------------------------------------------
         elif state == 96:
             if symbol == 'o':
-                return 97, None
+                return (97, None)
             elif symbol != 'o' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 97 ------------------------------------------------------
         elif state == 97:
             if symbol == 'a':
-                return 98, None
+                return (98, None)
             elif symbol != 'a' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 98 ------------------------------------------------------
         elif state == 98:
             if symbol == 't':
-                return 99, Token("float", "float")
+                return (99, Token("float", "float"))
             elif symbol != 't' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 99 ------------------------------------------------------
         elif state == 99:
             if self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 101 ------------------------------------------------------
         elif state == 101:
             if symbol == 'h':
-                return 102, None
+                return (102, None)
             elif symbol != 'h' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 102 ------------------------------------------------------
         elif state == 102:
             if symbol == 'a':
-                return 103, None
+                return (103, None)
             elif symbol != 'a' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 103 ------------------------------------------------------
         elif state == 103:
             if symbol == 'r':
-                return 104, Token("char", "char")
+                return (104, Token("char", "char"))
             elif symbol != 'r' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+                # State 104 ------------------------------------------------------
         elif state == 104:
             if self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 107 ------------------------------------------------------
         elif state == 107:
             if symbol == ' ' or symbol == '\t' or symbol == '\n':
-                return 107, Token("espaco", "espaco")
+                return (107, Token("espaco", "espaco"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 110 ------------------------------------------------------
         elif state == 110:
             if symbol.isalpha():
-                return 111, None
+                return (111, None)
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 111 ------------------------------------------------------
         elif state == 111:
             if symbol == "'":
-                return 112, Token("letra", "letra")
+                return (112, Token("letra", "letra"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 116 ------------------------------------------------------
+        elif state == 116:
+            if symbol == 'a':
+                return (117, None)
+            elif symbol != 'a' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+        # State 117 ------------------------------------------------------
+        elif state == 117:
+            if symbol == 'o':
+                return (118, Token("senao", "senao"))
+            elif symbol != 'o' and self.isDigitOrLetter(symbol):
+                return (1, Token("identificador", "identificador"))
+            else:
+                return (self.ERROR, None)
+
+        # State 118 ------------------------------------------------------
         elif state == 118:
             if self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
+                return (1, Token("identificador", "identificador"))
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
-        elif state == 120:
-            if symbol == 'o':
-                return 121, Token("do", "do")
-            elif symbol != 'o' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-            else:
-                return self.ERROR, None
-
-        elif state == 121:
-            if self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-            else:
-                return self.ERROR, None
-
+        # State 122 ------------------------------------------------------
         elif state == 122:
             if symbol == '*':
-                return 123, None
+                return (123, None)
             elif symbol != '*':
-                return 122, None
+                return (122, None)
             else:
-                return self.ERROR, None
+                return (self.ERROR, None)
 
+        # State 123 ------------------------------------------------------
         elif state == 123:
             if symbol == '/':
-                return 124, Token("comentario", "comentario")
+                return (124, Token("comentario", "comentario"))
             elif symbol != '/':
-                return 122, None
+                return (122, None)
             else:
-                return self.ERROR, None
-        else:
-            return self.ERROR, None
+                return (self.ERROR, None)
 
-    @staticmethod
-    def nextChar(file):
+        else:
+            return (self.ERROR, None)
+
+    # Busca o proximo char no arquivo
+    def nextChar(self, file):
         return file.read(1)
 
-    @staticmethod
-    def readSymbol(file, position):
+    # Le o char o na posicao passada
+    def readSymbol(self, file, position):
         file.seek(position)
         return file.read(1)
 
     def run(self):
-        tks = []
-        currentState = (-1, None)
-        token_value = ""
-        in_string_literal = False
 
-        while self.currentPositionFile < self.endFile:
-            symbol = self.nextChar(self.programFile)
-            self.coluna += 1
+        # pega a posicao no arquivo
+        valueToken = ""
+        currentState = (-1, None)  # "inicia no estado -1"
+
+        while self.currentPositionFile != self.endFile:  # enquanto nao chegou no fim do arquivo
+            symbol = self.readSymbol(self.programFile, self.currentPositionFile)
+            self.coluna += 1  # anda pelas palavras
             self.currentPositionFile += 1
-
-            if symbol == '"':
-                in_string_literal = not in_string_literal
-
-            if not in_string_literal and symbol.isspace():
-                continue
-
             currentState = self.nextToken(currentState[0], symbol)
-            # print(symbol)
-            # print(currentState[0])
 
-            if currentState[0] == self.ERROR:
-                print(f"Erro léxico na linha {self.linha}, coluna {self.coluna}: caracter '{symbol}' não reconhecido.")
-                return []
-
-            if currentState[1] is not None:
+            # quando o estado é diferente de NONE significa que pode ser um estado final e devemos fazer o lookahead
+            if currentState[1] != None:
+                # checa e é final de arquivo e faz o lookahead
                 if symbol == '\n':
                     self.coluna = 0
                     self.linha += 1
 
-                if currentState[1].atributo != 'comentario' and currentState[1].atributo != 'espaco':
-                    if currentState[1].atributo == 'id':
-                        token_value = token_value.strip()
-                    tks.append((Token(currentState[1].atributo, token_value), self.linha, self.coluna))
-                    token_value = ""
-                    currentState = (-1, None)
-                else:
-                    token_value += symbol
+                if self.currentPositionFile == self.endFile or \
+                        self.nextToken(currentState[0], self.readSymbol(self.programFile, self.currentPositionFile))[
+                            0] == self.ERROR:
+                    if self.currentPositionFile == self.endFile:
+                        return (Token("$", "$"), self.linha, self.coluna)
+                    if currentState[1].atributo == 'comentario' or currentState[1].atributo == 'espaco':
+                        currentState = (-1, None)
 
-        return tks
+                        continue
+                    valueToken = valueToken + symbol
+                    return (Token(currentState[1].atributo, valueToken), self.linha, self.coluna)
 
-
-analizador = AnalizadorLexico("codigo_exemplo")
-tokens = analizador.run()
-
-for token, linha, coluna in tokens:
-    print(f"Token: {token.tipo}, Linha: {linha}, Coluna: {coluna}")
+            # Concatenando os IDS necessários
+            valueToken = valueToken + symbol
