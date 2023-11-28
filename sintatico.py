@@ -1,9 +1,9 @@
 import os
-from AnalisadorLexico import AnalizadorLexico
+from lexico import AnalizadorLexico
 
 
 def isTerminal(x):
-    terminais = {'function', 'identificador', 'numero', 'se', 'entao', 'senao', 'enquanto', 'faca', 'repita', 'ate',
+    terminais = {'fun', 'id', 'number', 'if', 'then', 'else', 'while', 'do', 'for', 'to',
                  'int', 'float', 'char', '{', '}', '+', '-', '*', '^', '/', '==', '<', '>', '$', ';', ':', ',', '(',
                  ')', '='}
     return x in terminais
@@ -13,99 +13,67 @@ class TabelaSintatica:
     def __init__(self):
         self.tabela = dict()
 
-        self.tabela.update({'S': {'function': 1}})
+        self.tabela.update({'S': {'fun': 1}})
         self.tabela.update({'bloco': {'{': 2}})
-        self.tabela.update({'declaracao_das_variaveis': {'identificador': 4, 'se': 4, 'enquanto': 4, 'repita': 4,
-                                                         'int': 3, 'float': 3, 'char': 3}})
+        self.tabela.update({'declaracao': {'id': 4, 'if': 4, 'while': 4, 'for': 4, 'int': 3, 'float': 3, 'char': 3}})
         self.tabela.update({'tipo': {'int': 5, 'float': 6, 'char': 7}})
-        self.tabela.update({'lista_ids': {'identificador': 8}})
+        self.tabela.update({'lista_ids': {'id': 8}})
         self.tabela.update({'lista_ids_linha': {';': 10, ',': 9}})
-        self.tabela.update(
-            {'sequencia_de_comandos': {'identificador': 11, '}': 12, 'se': 11, 'enquanto': 11, 'repita': 11}})
-        self.tabela.update({'comando': {'identificador': 15, 'se': 13, 'enquanto': 14, 'repita': 14}})
-        self.tabela.update({'selecao': {'se': 16}})
-        self.tabela.update({'selecao_linha': {'identificador': 17, '{': 18, 'se': 17, 'enquanto': 17, 'repita': 17}})
-        self.tabela.update(
-            {'selecao_linha_linha': {'identificador': 10, '{': 20, 'se': 19, 'enquanto': 19, 'repita': 19}})
-        self.tabela.update({'repeticao': {'enquanto': 21, 'repita': 22}})
-        self.tabela.update({'repeticao_linha': {'identificador': 23, '{': 24, 'se': 23, 'enquanto': 23, 'repita': 23}})
-        self.tabela.update(
-            {'repeticao_linha_linha': {'identificador': 26, '{': 25, 'se': 26, 'enquanto': 26, 'repita': 22}})
-        self.tabela.update({'atribuicao': {'identificador': 27}})
-        self.tabela.update({'condicao': {'identificador': 28, 'numero': 28, 'letra': 28}})
-        self.tabela.update({'expressao': {'identificador': 29, 'numero': 30, 'letra': 30}})
-        self.tabela.update({'constante': {'numero': 33, 'letra': 34}})
+        self.tabela.update({'comandos': {'id': 11, '}': 12, 'if': 11, 'while': 11, 'for': 11}})
+        self.tabela.update({'comando': {'id': 15, 'if': 13, 'while': 14, 'for': 14}})
+        self.tabela.update({'selecao': {'if': 16}})
+        self.tabela.update({'selecao_linha': {'id': 17, '{': 18, 'if': 17, 'while': 17, 'for': 17}})
+        self.tabela.update({'selecao_linha_linha': {'id': 10, '{': 20, 'if': 19, 'while': 19, 'for': 19}})
+        self.tabela.update({'repeticao': {'while': 21, 'for': 22}})
+        self.tabela.update({'repeticao_linha': {'id': 23, '{': 24, 'if': 23, 'while': 23, 'for': 23}})
+        self.tabela.update({'repeticao_linha_linha': {'id': 26, '{': 25, 'if': 26, 'while': 26, 'for': 22}})
+        self.tabela.update({'atribuicao': {'id': 27}})
+        self.tabela.update({'condicao': {'id': 28, 'number': 28, 'letra': 28}})
+        self.tabela.update({'expressao': {'id': 29, 'number': 30, 'letra': 30}})
+        self.tabela.update({'constante': {'number': 33, 'letra': 34}})
+        self.tabela.update({'op_relacional': {'==': 35, '>=': 36, '<=': 37, '<>': 38}})
 
         self.producao = []
         self.producao.append([])
-        # 1. S ➡ function identificador ( ) bloco
-        self.producao.append(['function', 'identificador', '(', ')', 'bloco'])
-        # 2. bloco ➡ { declaracao_das_variaveis sequencia_de_comandos }
-        self.producao.append(['{', 'declaracao_das_variaveis', 'sequencia_de_comandos', '}'])
-        # 3. declaracao_das_variaveis ➡ tipo : lista_ids ; declaracao_das_variaveis
-        self.producao.append(['tipo', ':', 'lista_ids', ';', 'declaracao_das_variaveis'])
-        # 4. declaracao_das_variaveis ➡ ε
+
+        self.producao.append(['fun', 'id', '(', ')', 'bloco'])
+        self.producao.append(['{', 'declaracao', 'comandos', '}'])
+        self.producao.append(['tipo', ':', 'lista_ids', ';', 'declaracao'])
         self.producao.append(['epsilon'])
-        # 5. tipo ➡ int
         self.producao.append(['int'])
-        # 6. tipo ➡ float
         self.producao.append(['float'])
-        # 7. tipo ➡ char
         self.producao.append(['char'])
-        # 8. lista_ids → identificador lista_ids’
-        self.producao.append(['identificador', 'lista_ids_linha'])
-        # 9. lista_ids' → , lista_ids
+        self.producao.append(['id', 'lista_ids_linha'])
         self.producao.append([',', 'lista_ids'])
-        # 10. lista_ids' → ε
         self.producao.append(['epsilon'])
-        # 11. sequencia_de_comandos → comando sequencia_de_comandos
-        self.producao.append(['comando', 'sequencia_de_comandos'])
-        # 12. sequencia_de_comandos → ε
+        self.producao.append(['comando', 'comandos'])
         self.producao.append(['epsilon'])
-        # 13. comando → selecao
         self.producao.append(['selecao'])
-        # 14. comando → repeticao
         self.producao.append(['repeticao'])
-        # 15. comando → atribuicao
         self.producao.append(['atribuicao'])
-        # 16. selecao → se (condicao) entao selecao’
-        self.producao.append(['se', '(', 'condicao', ')', 'entao', 'selecao'])
-        # 17. selecao’ → comando senao selecao’’
-        self.producao.append(['comando', 'senao', 'selecao'])
-        # 18. selecao’ → bloco senao selecao’’
-        self.producao.append(['bloco', 'senao', 'selecao_linha_linha'])
-        # 19. selecao’’ → comando
+        self.producao.append(['if', '(', 'condicao', ')', 'then', 'selecao'])
+        self.producao.append(['comando', 'else', 'selecao'])
+        self.producao.append(['bloco', 'else', 'selecao_linha_linha'])
         self.producao.append(['comando'])
-        # 20. selecao’’ → bloco
         self.producao.append(['bloco'])
-        # 21. repeticao → enquanto (condicao) faca repeticao’
-        self.producao.append(['enquanto', '(', 'condicao', ')', 'faca', 'repeticao_linha'])
-        # 22. repeticao → repita repeticao’’
-        self.producao.append(['repita', 'repeticao_linha_linha'])
-        # 23. repeticao’ → comando
+        self.producao.append(['while', '(', 'condicao', ')', 'do', 'repeticao_linha'])
+        self.producao.append(['for', 'repeticao_linha_linha'])
         self.producao.append(['comando'])
-        # 24. repeticao’ → bloco
         self.producao.append(['bloco'])
-        # 25. repeticao’’ → bloco ate (condicao)
-        self.producao.append(['bloco', 'ate', '(', 'condicao', ')'])
-        # 26. repeticao’’ → comando ate (condicao)
-        self.producao.append(['comando', 'ate', '(', 'condicao', ')'])
-        # 27. atribuicao → identificador = expressao ;
-        self.producao.append(['identificador', '=', 'expressao'])
-        # 28. condicao → expressao op_relacional expressao
+        self.producao.append(['bloco', 'to', '(', 'condicao', ')'])
+        self.producao.append(['comando', 'to', '(', 'condicao', ')'])
+        self.producao.append(['id', '=', 'expressao', ";"])
         self.producao.append(['expressao', 'op_relacional', 'expressao'])
-        # 29. expressao → identificador
-        self.producao.append(['identificador'])
-        # 30. expressao → constante
+        self.producao.append(['id'])
         self.producao.append(['constante'])
-        # 31. expressao → (expressao)
         self.producao.append(['(', 'expressao', ')'])
-        # 32. expressao → expressao op_aritmetico expressao
         self.producao.append(['expressao', 'op_aritmetico', 'expressao'])
-        # 33. constante → numero
-        self.producao.append(['numero'])
-        # 34. constante →letra
+        self.producao.append(['number'])
         self.producao.append(['letra'])
+        self.producao.append(['=='])
+        self.producao.append(['>='])
+        self.producao.append(['<='])
+        self.producao.append(['<>'])
 
 
 class IdTable:
@@ -113,14 +81,14 @@ class IdTable:
         self.symbolsTable = dict()
         self.cont = 0
 
-        self.insert("function")
-        self.insert("se")
-        self.insert("entao")
-        self.insert("senao")
-        self.insert("enquanto")
-        self.insert("faca")
-        self.insert("repita")
-        self.insert("ate")
+        self.insert("fun")
+        self.insert("if")
+        self.insert("then")
+        self.insert("else")
+        self.insert("while")
+        self.insert("do")
+        self.insert("for")
+        self.insert("to")
         self.insert("int")
         self.insert("float")
         self.insert("char")
@@ -150,12 +118,16 @@ def analisadorSintatico(analisadorLexico):
 
     # Carrega proximo token
     token = analisadorLexico.run()
+    print(f"token: {token}")
     proxToken = token[0].tipo
+    print(f"proxToken: {proxToken}")
     tabelaSintatica = TabelaSintatica()
 
     while len(pilha) > 0:
         x = pilha[-1]
         pilha.pop()
+
+        print(f"isTerminal({x}) = {isTerminal(x)}")
 
         if isTerminal(x):
 
@@ -168,6 +140,7 @@ def analisadorSintatico(analisadorLexico):
                     return "Cadeia Aceita"
 
                 proxToken = token[0].tipo
+                print(f"ProxToken:{proxToken}")
                 continue
             else:
                 print("Erro! Token {} nao era esperado! Linha: {} | Coluna: {}".format(token[0].atributo, token[1],
@@ -182,7 +155,7 @@ def analisadorSintatico(analisadorLexico):
                 try:
                     idProducao = tabelaSintatica.tabela[x][proxToken]
                     producoes = tabelaSintatica.producao[idProducao]
-                    print(f"vai pra producao de numero {idProducao}")
+                    print(f"vai pra producao de number {idProducao}")
                     print(f"nao eh terminal, producoes: {producoes}")
                     for prod in reversed(producoes):
                         if prod != 'epsilon':
@@ -198,6 +171,5 @@ def analisadorSintatico(analisadorLexico):
 
 
 if __name__ == "__main__":
-    fileName = input("Arquivo para analise: ")
-    analisadorLexo = AnalizadorLexico(fileName)
+    analisadorLexo = AnalizadorLexico("teste1.txt")
     analisadorSintatico(analisadorLexo)
