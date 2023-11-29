@@ -10,7 +10,7 @@ class Token:
         return f"Token({self.tipo}, {self.atributo})"
 
 
-class AnalizadorLexico:
+class analizador_lexico:
     def __init__(self, programFileName):
         self.ERROR = None
         self.programFileName = programFileName
@@ -582,9 +582,6 @@ class AnalizadorLexico:
 
                         continue
                     valueToken = valueToken + symbol
-                    print(f"valueToken {valueToken}")
-                    print(f"symbol {symbol}")
-                    print(f"currentState[1].atributo {currentState[1].atributo}")
                     return (Token(currentState[1].atributo, valueToken), self.linha, self.coluna)
 
             # Concatenando os IDS necessários
