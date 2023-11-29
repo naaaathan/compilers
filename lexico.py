@@ -10,579 +10,580 @@ class Token:
         return f"Token({self.tipo}, {self.atributo})"
 
 
-class analizador_lexico:
-    def __init__(self, programFileName):
+class AnalisadorLexico:
+    def __init__(self, nome_do_programa):
         self.ERROR = None
-        self.programFileName = programFileName
-        self.programFile = open(programFileName, "r+")
+        self.nome_do_programa = nome_do_programa
+        self.arquivo = open(nome_do_programa, "r+")
         self.linha = 1
         self.coluna = 1
-        self.currentPositionFile = 0
-        self.endFile = os.path.getsize("./" + self.programFileName)
+        self.posicao_arquivo = 0
+        self.final_do_arquivo = os.path.getsize("./" + self.nome_do_programa)
 
     @staticmethod
-    def isDigitOrLetter(symbol):
-        return symbol.isalnum() or symbol == '_'
+    def digito_ou_letra(palavra):
+        return palavra.isalnum() or palavra == '_'
 
-    def peekNextChar(self):
-        current_position = self.programFile.tell()
-        next_char = self.programFile.read(1)
-        self.programFile.seek(current_position)
+    def get_next(self):
+        current_position = self.arquivo.tell()
+        next_char = self.arquivo.read(1)
+        self.arquivo.seek(current_position)
         return next_char
 
-    def nextToken(self, state, symbol):
-
-        lookahead_symbol = self.peekNextChar()
-
-        if state == -1:
-            if symbol == '_':
-                return 1, Token("id", "id")
-            elif symbol == 'b':
-                return 1, Token("id", "id")
-            elif symbol == 'g':
-                return 1, Token("id", "id")
-            elif symbol == 'h':
-                return 1, Token("id", "id")
-            elif symbol == 'j':
-                return 1, Token("id", "id")
-            elif symbol == 'k':
-                return 1, Token("id", "id")
-            elif symbol == 'l':
-                return 1, Token("id", "id")
-            elif symbol == 'm':
-                return 1, Token("id", "id")
-            elif symbol == 'n':
-                return 1, Token("id", "id")
-            elif symbol == 'o':
-                return 1, Token("id", "id")
-            elif symbol == 'p':
-                return 1, Token("id", "id")
-            elif symbol == 'q':
-                return 1, Token("id", "id")
-            elif symbol == 'r':
-                return 1, Token("id", "id")
-            elif symbol == 'u':
-                return 1, Token("id", "id")
-            elif symbol == 's':
-                return 1, Token("id", "id")
-            elif symbol == 'v':
-                return 1, Token("id", "id")
-            elif symbol == 'x':
-                return 1, Token("id", "id")
-            elif symbol == 'y':
-                return 1, Token("id", "id")
-            elif symbol == 'z':
+    def get_token(self, estado, palavra):
+        if estado == -1:
+            # não encontra dentro das palavras reservadas
+            if palavra in ['_', 'a', 'b', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'o',
+                           'p', 'q', 'r', 's', 'u', 'v', 'x', 'y', 'z']:
                 return 1, Token("id", "id")
 
-            elif symbol == 'a':
-                return 49, None
+            # char [2, 3, 4, 5]
+            elif palavra == 'c':
+                return 2, None
 
-            elif symbol == 'c':
-                return 101, None
+            # do [6, 7]
+            elif palavra == 'd':
+                return 6, None
 
-            elif symbol == 'd':
-                return 120, None
+            # else [8, 9, 10, 11]
+            elif palavra == 'e':
+                return 8, None
 
-            elif symbol == 'i':
-                return 91, None
+            # fun [12, 13, 14] for [12, 15, 16] float [12, 17, 18, 19, 20]
+            elif palavra == 'f':
+                return 12, None
 
-            elif symbol == 'e':
-                return 18, None
+            # if [21, 22] int [21, 23, 24]
+            elif palavra == 'i':
+                return 21, None
 
-            elif symbol == 'f':
-                return 4, None
+            # then [25, 26, 27, 28] to [25, 29]
+            elif palavra == 't':
+                return 25, None
 
-            elif symbol == 't':
-                return 130, None
+            # while [30, 31, 32, 33, 34]
+            elif palavra == 'w':
+                return 30, None
 
-            elif symbol == 'w':
-                return 41, None
-
-            elif symbol == '<':
+            elif palavra == '<':
                 return 69, Token("RELOP", "LT")
 
-            elif symbol == '>':
+            elif palavra == '>':
                 return 73, Token("RELOP", "GT")
 
-            elif symbol == '=':
+            elif palavra == '=':
                 return 54, Token("=", "=")
 
-            elif symbol == ':':
+            elif palavra == ':':
                 return 83, Token(":", ":")
 
-            elif symbol == ',':
+            elif palavra == ',':
                 return 84, Token(",", ",")
 
-            elif symbol == ';':
+            elif palavra == ';':
                 return 85, Token(";", ";")
 
-            elif symbol == '(':
+            elif palavra == '(':
                 return 86, Token("(", "(")
 
-            elif symbol == ')':
+            elif palavra == ')':
                 return 87, Token(")", ")")
 
-            elif symbol == '{':
+            elif palavra == '{':
                 return 88, Token("{", "{")
 
-            elif symbol == '}':
+            elif palavra == '}':
                 return 89, Token("}", "}")
 
-            elif symbol.isnumeric():
+            elif palavra.isnumeric():
                 return 57, Token("digito", "number")
 
-            elif symbol == "'":
+            elif palavra == "'":
                 return 110, None
 
-            elif symbol == ' ' or symbol == '\t' or symbol == '\n':
+            elif palavra == ' ' or palavra == '\t' or palavra == '\n':
                 return 107, Token("espaco", "espaco")
 
-            elif symbol == '+':
+            elif palavra == '+':
                 return 77, Token("op_aritimetico", "+")
 
-            elif symbol == '-':
+            elif palavra == '-':
                 return 78, Token("op_aritimetico", "-")
 
-            elif symbol == '*':
+            elif palavra == '*':
                 return 79, Token("op_aritimetico", "*")
 
-            elif symbol == '/':
+            elif palavra == '/':
                 return 80, Token("op_aritimetico", "/")
 
-            elif symbol == '^':
+            elif palavra == '^':
                 return 81, Token("op_aritimetico", "^")
 
             else:
                 return self.ERROR, None
 
-        elif state == 0:
-            if symbol.isalnum() or symbol == '_':
+        elif estado == 0:
+            if palavra.isalnum() or palavra == '_':
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 1:
-            if symbol.isalnum() or symbol == '_':
+        elif estado == 1:
+            if palavra.isalnum() or palavra == '_':
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 4:
-            if symbol == 'u':
-                return 5, None
-            elif symbol == 'l':
-                return 96, None
-            elif symbol != 'u' and symbol != 'l' and self.isDigitOrLetter(symbol):
+        # CHAR
+
+        elif estado == 2:
+            if palavra == 'h':
+                return 3, None
+            elif palavra != 'h' and self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 5:
-            if symbol == 'n':
-                return 125, Token("fun", "fun")
-            elif symbol != 'n' and self.isDigitOrLetter(symbol):
+        elif estado == 3:
+            if palavra == 'a':
+                return 4, None
+            elif palavra != 'a' and self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 125:
-            if self.isDigitOrLetter(symbol):
+        elif estado == 4:
+            if palavra == 'r':
+                return 5, Token("char", "char")
+            elif palavra != 'r' and self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 6:
-            if symbol != 'c' and self.isDigitOrLetter(symbol):
+        elif estado == 5:
+            if self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 7:
-            if symbol != 't' and self.isDigitOrLetter(symbol):
+        # DO
+
+        elif estado == 6:
+            if palavra == 'o':
+                return 7, Token("do", "do")
+            elif palavra != 'o' and self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 8:
-            if symbol != 'i' and self.isDigitOrLetter(symbol):
+        elif estado == 7:
+            if self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 9:
-            if symbol != 'o' and self.isDigitOrLetter(symbol):
+        # ELSE
+
+        elif estado == 8:
+            if palavra == 'l':
+                return 9, None
+            elif palavra != 'l' and self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 10:
-            if symbol != 'n' and self.isDigitOrLetter(symbol):
+        elif estado == 9:
+            if palavra == 's':
+                return 10, None
+            elif palavra != 's' and self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 11:
-            if self.isDigitOrLetter(symbol):
+        elif estado == 10:
+            if palavra == 'e':
+                return 11, Token("else", "else")
+            elif palavra != 'e' and self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 18:
-            if symbol == 'l':
+        elif estado == 11:
+            if self.digito_ou_letra(palavra):
+                return 1, Token("id", "id")
+            else:
+                return self.ERROR, None
+
+        # FUN
+
+        elif estado == 12:
+            if palavra == 'u':
+                return 13, None
+            if palavra == 'o':
+                return 15, None
+            elif palavra == 'l':
+                return 17, None
+            elif palavra != 'u' and palavra != 'o' and palavra != 'l' and self.digito_ou_letra(palavra):
+                return 1, Token("id", "id")
+            else:
+                return self.ERROR, None
+
+        elif estado == 13:
+            if palavra == 'n':
+                return 14, Token("fun", "fun")
+            elif palavra != 'n' and self.digito_ou_letra(palavra):
+                return 1, Token("id", "id")
+            else:
+                return self.ERROR, None
+
+        elif estado == 14:
+            if self.digito_ou_letra(palavra):
+                return 1, Token("id", "id")
+            else:
+                return self.ERROR, None
+
+        # FOR
+
+        elif estado == 15:
+            if palavra == 'r':
+                return 16, Token("for", "for")
+            if palavra != 'r' and self.digito_ou_letra(palavra):
+                return 1, Token("id", "id")
+            else:
+                return self.ERROR, None
+
+        elif estado == 16:
+            if self.digito_ou_letra(palavra):
+                return 1, Token("id", "id")
+            else:
+                return self.ERROR, None
+
+        # FLOAT
+
+        elif estado == 17:
+            if palavra == 'o':
+                return 18, None
+            elif palavra != 'o' and self.digito_ou_letra(palavra):
+                return 1, Token("id", "id")
+            else:
+                return self.ERROR, None
+
+        elif estado == 18:
+            if palavra == 'a':
                 return 19, None
-            elif symbol != 'l' and self.isDigitOrLetter(symbol):
+            elif palavra != 'a' and self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 19:
-            if symbol == 's':
-                return 20, None
-            elif symbol != 's' and self.isDigitOrLetter(symbol):
+        elif estado == 19:
+            if palavra == 't':
+                return 20, Token("float", "float")
+            elif palavra != 't' and self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 20:
-            if symbol == 'e':
-                return 22, Token("else", "else")
-            elif symbol != 'e' and self.isDigitOrLetter(symbol):
+        elif estado == 20:
+            if self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 22:
-            if self.isDigitOrLetter(symbol):
+        # IF
+
+        elif estado == 21:
+            if palavra == 'f':
+                return 22, Token("if", "if")
+            elif palavra == 'n':
+                return 23, None
+            elif palavra != 'n' and palavra != 'f' and self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 41:
-            if symbol == 'h':
-                return 42, None
-            elif symbol != 'h' and self.isDigitOrLetter(symbol):
+        elif estado == 22:
+            if self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 42:
-            if symbol == 'i':
-                return 43, None
-            elif symbol != 'i' and self.isDigitOrLetter(symbol):
+        # INT
+
+        elif estado == 23:
+            if palavra == 't':
+                return 24, Token("int", "int")
+            elif palavra != 't' and self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 43:
-            if symbol == 'l':
-                return 43, None
-            elif symbol != 'l' and self.isDigitOrLetter(symbol):
+        elif estado == 24:
+            if self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 44:
-            if symbol == 'e':
-                return 45, Token("while", "while")
-            elif symbol != 'e' and self.isDigitOrLetter(symbol):
+        # THEN
+
+        elif estado == 25:
+            if palavra == 'h':
+                return 26, None
+            elif palavra == 'o':
+                return 29, Token("to", "to")
+            elif palavra != 'h' and palavra != 'o' and self.digito_ou_letra(palavra):
+                return 1, Token("id", "id")
+
+            else:
+                return self.ERROR, None
+
+        elif estado == 26:
+            if palavra == 'e':
+                return 27, None
+            elif palavra != 'e' and self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 45:
-            if self.isDigitOrLetter(symbol):
+        elif estado == 27:
+            if palavra == 'n':
+                return 28, Token("then", "then")
+            elif palavra != 'n' and self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 49:
-            if self.isDigitOrLetter(symbol) or not self.isDigitOrLetter(lookahead_symbol):
+        elif estado == 28:
+            if self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 51:
-            if self.isDigitOrLetter(symbol):
+        # TO
+
+        elif estado == 29:
+            if self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 54:
-            if symbol == '=':
+        # WHILE
+
+        elif estado == 30:
+            if palavra == 'h':
+                return 31, None
+            elif palavra != 'h' and self.digito_ou_letra(palavra):
+                return 1, Token("id", "id")
+            else:
+                return self.ERROR, None
+
+        elif estado == 31:
+            if palavra == 'i':
+                return 32, None
+            elif palavra != 'i' and self.digito_ou_letra(palavra):
+                return 1, Token("id", "id")
+            else:
+                return self.ERROR, None
+
+        elif estado == 32:
+            if palavra == 'l':
+                return 33, None
+            elif palavra != 'l' and self.digito_ou_letra(palavra):
+                return 1, Token("id", "id")
+            else:
+                return self.ERROR, None
+
+        elif estado == 33:
+            if palavra == 'e':
+                return 34, Token("while", "while")
+            elif palavra != 'e' and self.digito_ou_letra(palavra):
+                return 1, Token("id", "id")
+            else:
+                return self.ERROR, None
+
+        elif estado == 34:
+            if self.digito_ou_letra(palavra):
+                return 1, Token("id", "id")
+            else:
+                return self.ERROR, None
+
+        elif estado == 51:
+            if self.digito_ou_letra(palavra):
+                return 1, Token("id", "id")
+            else:
+                return self.ERROR, None
+
+        elif estado == 54:
+            if palavra == '=':
                 return 68, Token("==", "==")
             else:
                 return self.ERROR, None
 
-        elif state == 57:
-            if symbol.isnumeric():
+        elif estado == 57:
+            if palavra.isnumeric():
                 return 57, Token("digito", "number")
-            elif symbol == ',':
+            elif palavra == ',':
                 return 59, None
-            elif symbol == 'E':
+            elif palavra == 'E':
                 return 62, None
             else:
                 return self.ERROR, None
 
-        elif state == 59:
-            if symbol.isnumeric():
+        elif estado == 59:
+            if palavra.isnumeric():
                 return 60, Token("digito", "number")
             else:
                 return self.ERROR, None
 
-        elif state == 60:
-            if symbol.isnumeric():
+        elif estado == 60:
+            if palavra.isnumeric():
                 return 60, Token("digito", "number")
-            elif symbol == 'E':
+            elif palavra == 'E':
                 return 62, None
             else:
                 return self.ERROR, None
 
-        elif state == 62:
-            if symbol.isnumeric():
+        elif estado == 62:
+            if palavra.isnumeric():
                 return 64, Token("digito", "number")
-            elif symbol == '+' or symbol == '-':
+            elif palavra == '+' or palavra == '-':
                 return 63, None
             else:
                 return self.ERROR, None
 
-        elif state == 63:
-            if symbol.isnumeric():
+        elif estado == 63:
+            if palavra.isnumeric():
                 return 64, Token("digito", "number")
             else:
                 return self.ERROR, None
 
-        elif state == 64:
-            if symbol.isnumeric():
+        elif estado == 64:
+            if palavra.isnumeric():
                 return 64, Token("digito", "number")
             else:
                 return self.ERROR, None
 
-        elif state == 69:
-            if symbol == '>':
+        elif estado == 69:
+            if palavra == '>':
                 return 70, Token("op_relacional", "<>")
-            elif symbol == '=':
+            elif palavra == '=':
                 return 71, Token("op_relacional", "<=")
             else:
                 return self.ERROR, None
 
-        elif state == 73:
-            if symbol == '=':
+        elif estado == 73:
+            if palavra == '=':
                 return 74, Token("op_relacional", ">=")
             else:
                 return self.ERROR, None
 
-        elif state == 80:
-            if symbol == '/':
+        elif estado == 80:
+            if palavra == '/':
                 return 122, None
             else:
                 return self.ERROR, None
 
-        elif state == 91:
-            if symbol != 'n' and symbol != 'f' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-            elif symbol == 'n':
-                return 92, None
-            elif symbol == 'f':
-                return 93, Token("if", "if")
-            else:
-                return self.ERROR, None
-
-        elif state == 92:
-            if symbol == 't':
-                return 93, Token("int", "int")
-            elif symbol != 't' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-            else:
-                return self.ERROR, None
-
-        elif state == 93:
-            if self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-            else:
-                return self.ERROR, None
-
-        elif state == 96:
-            if symbol == 'o':
+        elif estado == 96:
+            if palavra == 'o':
                 return 97, None
-            elif symbol != 'o' and self.isDigitOrLetter(symbol):
+            elif palavra != 'o' and self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 97:
-            if symbol == 'a':
+        elif estado == 97:
+            if palavra == 'a':
                 return 98, None
-            elif symbol != 'a' and self.isDigitOrLetter(symbol):
+            elif palavra != 'a' and self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 98:
-            if symbol == 't':
+        elif estado == 98:
+            if palavra == 't':
                 return 99, Token("float", "float")
-            elif symbol != 't' and self.isDigitOrLetter(symbol):
+            elif palavra != 't' and self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 99:
-            if self.isDigitOrLetter(symbol):
+        elif estado == 99:
+            if self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 101:
-            if symbol == 'h':
-                return 102, None
-            elif symbol != 'h' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-            else:
-                return self.ERROR, None
-
-        elif state == 102:
-            if symbol == 'a':
-                return 103, None
-            elif symbol != 'a' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-            else:
-                return self.ERROR, None
-
-        elif state == 103:
-            if symbol == 'r':
-                return 104, Token("char", "char")
-            elif symbol != 'r' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-            else:
-                return self.ERROR, None
-
-        elif state == 104:
-            if self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-            else:
-                return self.ERROR, None
-
-        elif state == 107:
-            if symbol == ' ' or symbol == '\t' or symbol == '\n':
+        elif estado == 107:
+            if palavra == ' ' or palavra == '\t' or palavra == '\n':
                 return 107, Token("espaco", "espaco")
             else:
                 return self.ERROR, None
 
-        elif state == 110:
-            if symbol.isalpha():
+        elif estado == 110:
+            if palavra.isalpha():
                 return 111, None
             else:
                 return self.ERROR, None
 
-        elif state == 111:
-            if symbol == "'":
+        elif estado == 111:
+            if palavra == "'":
                 return 112, Token("letra", "letra")
             else:
                 return self.ERROR, None
 
-        elif state == 118:
-            if self.isDigitOrLetter(symbol):
+        elif estado == 118:
+            if self.digito_ou_letra(palavra):
                 return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
-        elif state == 120:
-            if symbol == 'o':
-                return 121, Token("do", "do")
-            elif symbol != 'o' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-            else:
-                return self.ERROR, None
-
-        elif state == 121:
-            if self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-            else:
-                return self.ERROR, None
-
-        elif state == 122:
-            if symbol == '\n':
+        elif estado == 122:
+            if palavra == '\n':
                 return 124, Token("comentario", "comentario")
-            elif symbol != '\n':
+            elif palavra != '\n':
                 return 122, None
-            else:
-                return self.ERROR, None
-
-        elif state == 130:
-            if symbol == 'o':
-                return 131, Token("to", "to")
-            elif symbol == 'h':
-                return 132, None
-            elif symbol != 'o' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-
-            else:
-                return self.ERROR, None
-
-        elif state == 131:
-            if self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-            else:
-                return self.ERROR, None
-
-        elif state == 132:
-            if symbol == 'e':
-                return 133, None
-            elif symbol != 'e' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
-            else:
-                return self.ERROR, None
-
-        elif state == 133:
-            if symbol == 'n':
-                return 134, Token("then", "then")
-            elif symbol != 'n' and self.isDigitOrLetter(symbol):
-                return 1, Token("id", "id")
             else:
                 return self.ERROR, None
 
         else:
             return self.ERROR, None
 
-
     @staticmethod
-    def nextChar(file):
+    def next_char(file):
         return file.read(1)
 
     @staticmethod
-    def readSymbol(file, position):
+    def read_symbol(file, position):
         file.seek(position)
         return file.read(1)
 
     def run(self):
+        token = ""
+        estado_atual = (-1, None)
 
-        # pega a posicao no arquivo
-        valueToken = ""
-        currentState = (-1, None)  # "inicia no estado -1"
+        while self.posicao_arquivo != self.final_do_arquivo:
+            palavra = self.read_symbol(self.arquivo, self.posicao_arquivo)
 
-        while self.currentPositionFile != self.endFile:  # enquanto nao chegou no fim do arquivo
-            symbol = self.readSymbol(self.programFile, self.currentPositionFile)
-            self.coluna += 1  # anda pelas palavras
-            self.currentPositionFile += 1
-            currentState = self.nextToken(currentState[0], symbol)
+            self.coluna += 1
+            self.posicao_arquivo += 1
+            estado_atual = self.get_token(estado_atual[0], palavra)
 
-            # quando o estado é diferente de NONE significa que pode ser um estado final e devemos fazer o lookahead
-            if currentState[1] != None:
-                # checa e é final de arquivo e faz o lookahead
-                if symbol == '\n':
+            if estado_atual[1] == None:
+                # LOOKAHEAD
+                token = token + palavra
+            else:
+                if palavra == '\n':
                     self.coluna = 0
                     self.linha += 1
 
-                if self.currentPositionFile == self.endFile or \
-                        self.nextToken(currentState[0], self.readSymbol(self.programFile, self.currentPositionFile))[
-                            0] == self.ERROR:
-                    if self.currentPositionFile == self.endFile:
-                        return (Token("$", "$"), self.linha, self.coluna)
-                    if currentState[1].atributo == 'comentario' or currentState[1].atributo == 'espaco':
-                        currentState = (-1, None)
+                if self.posicao_arquivo == self.final_do_arquivo:
+                    return (Token("$", "$"), self.linha, self.coluna)
 
+                if self.get_token(estado_atual[0], self.read_symbol(self.arquivo, self.posicao_arquivo))[
+                    0] == self.ERROR:
+                    if estado_atual[1].atributo == 'comentario' or estado_atual[1].atributo == 'espaco':
+                        estado_atual = (-1, None)
                         continue
-                    valueToken = valueToken + symbol
-                    return (Token(currentState[1].atributo, valueToken), self.linha, self.coluna)
 
-            # Concatenando os IDS necessários
-            valueToken = valueToken + symbol
+                    token = token + palavra
+                    return (Token(estado_atual[1].atributo, token), self.linha, self.coluna)

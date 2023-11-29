@@ -1,5 +1,4 @@
-from lexico import analizador_lexico
-
+from lexico import AnalisadorLexico
 
 TERMINAIS = {'fun', 'id', 'number', 'if', 'then', 'else', 'while', 'do', 'for', 'to',
              'int', 'float', 'char', '{', '}', '+', '-', '*', '^', '/', '==', '<', '>', '$', ';', ':', ',', '(',
@@ -30,7 +29,8 @@ def cria_tabela_sintatica():
         'condicao': {'id': 28, 'number': 28, 'letra': 28},
         'expressao': {'id': 29, 'number': 30, 'letra': 30},
         'constante': {'number': 33, 'letra': 34},
-        'op_relacional': {'==': 35, '>=': 36, '<=': 37, '<>': 38}
+        'op_relacional': {'==': 35, '>=': 36, '<=': 37, '<>': 38, '>': 39, '<': 40}
+
     }
 
 
@@ -74,7 +74,9 @@ def cria_producoes():
         ['=='],
         ['>='],
         ['<='],
-        ['<>']
+        ['<>'],
+        ['>'],
+        ['<']
     ]
 
 
@@ -88,7 +90,6 @@ def analisador_sintatico(analisador_lexico):
     tree = dict()
     stack = ["S"]
 
-    # Carrega próximo token
     token = analisador_lexico.run()
     prox_token = token[0].tipo
     tabela_sintatica = TabelaSintatica()
@@ -134,5 +135,5 @@ def analisador_sintatico(analisador_lexico):
 
 
 if __name__ == "__main__":
-    lexico = analizador_lexico("codigo_exemplo")
+    lexico = AnalisadorLexico("codigo_exemplo")
     analisador_sintatico(lexico)
