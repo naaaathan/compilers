@@ -1,3 +1,5 @@
-fun prog3 (){
-    if(1 == 1) then x = 10;
+fun main (){
+    int: idade;
+    idade = 14;
+    if(idade == 14) then idade = 14;
 }
